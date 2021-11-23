@@ -12,6 +12,7 @@ buildscript {
     classpath (BuildPlugins.androidGradlePlugin)
     classpath (BuildPlugins.kotlinGradlePlugin)
     classpath (BuildPlugins.hiltGradlePlugin)
+    classpath("com.android.tools.build:gradle:4.2.2")
   }
 }
 
