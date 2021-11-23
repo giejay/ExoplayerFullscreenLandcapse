@@ -17,8 +17,9 @@ package com.fernandocejas.sample.features.movies
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.core.os.bundleOf
+import com.fernandocejas.sample.core.platform.BaseFragment
 import com.fernandocejas.sample.R
 import com.fernandocejas.sample.core.exception.Failure
 import com.fernandocejas.sample.core.exception.Failure.NetworkConnection
@@ -26,12 +27,10 @@ import com.fernandocejas.sample.core.exception.Failure.ServerError
 import com.fernandocejas.sample.core.extension.*
 import com.fernandocejas.sample.core.platform.BaseFragment
 import com.fernandocejas.sample.features.movies.MovieFailure.NonExistentMovie
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class MovieDetailsFragment : BaseFragment() {
 
     companion object {
@@ -42,8 +41,7 @@ class MovieDetailsFragment : BaseFragment() {
         }
     }
 
-    @Inject
-    lateinit var movieDetailsAnimator: MovieDetailsAnimator
+    @Inject lateinit var movieDetailsAnimator: MovieDetailsAnimator
 
     private val movieDetailsViewModel by viewModels<MovieDetailsViewModel>()
 
@@ -98,18 +96,10 @@ class MovieDetailsFragment : BaseFragment() {
 
     private fun handleFailure(failure: Failure?) {
         when (failure) {
-            is NetworkConnection -> {
-                notify(R.string.failure_network_connection); close()
-            }
-            is ServerError -> {
-                notify(R.string.failure_server_error); close()
-            }
-            is NonExistentMovie -> {
-                notify(R.string.failure_movie_non_existent); close()
-            }
-            else -> {
-                notify(R.string.failure_server_error); close()
-            }
+            is NetworkConnection -> { notify(R.string.failure_network_connection); close() }
+            is ServerError -> { notify(R.string.failure_server_error); close() }
+            is NonExistentMovie -> { notify(R.string.failure_movie_non_existent); close() }
+            else -> { notify(R.string.failure_server_error); close() }
         }
     }
 }

@@ -17,7 +17,7 @@ package com.fernandocejas.sample.features.movies
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.SavedStateHandle
 import com.fernandocejas.sample.core.interactor.UseCase.None
 import com.fernandocejas.sample.core.platform.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel
-@Inject constructor(private val getMovies: GetMovies) : BaseViewModel() {
+@Inject constructor(private val getMovies: GetMovies,
+                    private val savedStateHandle: SavedStateHandle) : BaseViewModel() {
 
     private val _movies: MutableLiveData<List<MovieView>> = MutableLiveData()
     val movies: LiveData<List<MovieView>> = _movies
 
-    fun loadMovies() =
-        getMovies(None(), viewModelScope) { it.fold(::handleFailure, ::handleMovieList) }
+    fun loadMovies() = getMovies(None()) { it.fold(::handleFailure, ::handleMovieList) }
 
     private fun handleMovieList(movies: List<Movie>) {
         _movies.value = movies.map { MovieView(it.id, it.poster) }
