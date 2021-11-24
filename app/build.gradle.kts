@@ -57,6 +57,13 @@ dependencies {
   implementation(Libraries.retrofit)
   implementation(Libraries.okHttpLoggingInterceptor)
 
+
+  implementation(project(":exoplayer-core"))
+  implementation(project(":exoplayer-ui"))
+  implementation(project(":exoplayer-rtp"))
+  implementation(project(":exoplayer-rtsp"))
+  implementation(project(":exoplayer-sdp"))
+
   //TODO: change this
   implementation ("androidx.fragment:fragment-ktx:1.2.5")
 

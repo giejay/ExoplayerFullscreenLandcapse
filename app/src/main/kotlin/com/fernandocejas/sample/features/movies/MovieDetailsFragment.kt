@@ -25,7 +25,6 @@ import com.fernandocejas.sample.core.exception.Failure
 import com.fernandocejas.sample.core.exception.Failure.NetworkConnection
 import com.fernandocejas.sample.core.exception.Failure.ServerError
 import com.fernandocejas.sample.core.extension.*
-import com.fernandocejas.sample.core.platform.BaseFragment
 import com.fernandocejas.sample.features.movies.MovieFailure.NonExistentMovie
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import kotlinx.android.synthetic.main.toolbar.*
