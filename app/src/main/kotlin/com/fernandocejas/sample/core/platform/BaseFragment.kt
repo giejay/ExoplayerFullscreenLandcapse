@@ -17,6 +17,7 @@ package com.fernandocejas.sample.core.platform
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -61,5 +62,9 @@ abstract class BaseFragment : Fragment() {
         snackBar.setAction(actionText) { _ -> action.invoke() }
         snackBar.setActionTextColor(ContextCompat.getColor(appContext, color.colorTextPrimary))
         snackBar.show()
+    }
+
+    open fun onTouchEvent(event: MotionEvent?){
+
     }
 }

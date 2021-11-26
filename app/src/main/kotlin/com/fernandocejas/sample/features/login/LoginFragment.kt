@@ -20,16 +20,13 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.fernandocejas.sample.R
 import com.fernandocejas.sample.core.extension.inTransaction
 import com.fernandocejas.sample.core.platform.BaseFragment
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.rtsp.RtspDefaultClient
 import com.google.android.exoplayer2.source.rtsp.RtspMediaSource
@@ -37,13 +34,10 @@ import com.google.android.exoplayer2.source.rtsp.core.Client
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 
 import com.google.android.exoplayer2.ExoPlayerFactory
 
-import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_layout.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.main_layout
@@ -56,8 +50,11 @@ class LoginFragment : BaseFragment() {
     private val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
     private val TAG = "ExoPlayer"
 
+//    private lateinit var scaleGestureDetector: ScaleGestureDetector
     private lateinit var dataSourceFactory: DefaultHttpDataSourceFactory
     private lateinit var exoPlayer: ExoPlayer
+    private lateinit var mFullScreenDialog: Dialog
+
     private val source: MediaSource = RtspMediaSource.Factory(
         RtspDefaultClient.factory()
             .setFlags(Client.FLAG_ENABLE_RTCP_SUPPORT)
@@ -65,12 +62,8 @@ class LoginFragment : BaseFragment() {
     )
         .createMediaSource(Uri.parse("rtsp://192.168.2.15:8554/proxied"))
 
-    //    private lateinit var mFullScreenIcon: ImageView
-    private lateinit var mFullScreenDialog: Dialog
-//    private lateinit var frameLayout: FrameLayout
-//    private lateinit var mFullScreenButton: FrameLayout
-
     private var mExoPlayerFullscreen = false
+    private var zoomed = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,7 +99,6 @@ class LoginFragment : BaseFragment() {
                     super.onBackPressed()
                 }
             }
-
         return view
     }
 
@@ -115,28 +107,52 @@ class LoginFragment : BaseFragment() {
         exo_play.setOnClickListener {
             prepare()
         }
+//        this.scaleGestureDetector =
+//            ScaleGestureDetector(requireContext(), CustomOnScaleGestureListener(exo_player_view))
+
+        exo_zoom.setOnClickListener{
+            if(zoomed){
+                exo_player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+            } else {
+                exo_player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            }
+            zoomed = !zoomed
+        }
         exo_fullscreen_button.setOnClickListener { if (!mExoPlayerFullscreen) openFullscreenDialog() else closeFullscreenDialog() }
-        exoPlayerView!!.useController = true;
-        exoPlayerView!!.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH;
-        exoPlayerView!!.player = this.exoPlayer
+        exo_player_view!!.useController = true;
+        exo_player_view!!.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH;
+        exo_player_view!!.player = this.exoPlayer
         this.exoPlayer.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_IDLE -> {
-                        Snackbar.make(main_layout, "Player is idle, retrying", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            main_layout,
+                            "Player is idle, retrying",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                         prepare()
                         Log.d(TAG, "onPlayerStateChanged: STATE_IDLE")
                     }
                     Player.STATE_BUFFERING -> {
-                        Snackbar.make(main_layout, "Player is buffering", Snackbar.LENGTH_INDEFINITE).show()
+                        Snackbar.make(
+                            main_layout,
+                            "Player is buffering",
+                            Snackbar.LENGTH_INDEFINITE
+                        ).show()
                         Log.d(TAG, "onPlayerStateChanged: STATE_BUFFERING")
                     }
                     Player.STATE_READY -> {
+                        exo_player_view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                         Snackbar.make(main_layout, "Player is ready", Snackbar.LENGTH_SHORT).show()
                         Log.d(TAG, "onPlayerStateChanged: STATE_READY")
                     }
                     Player.STATE_ENDED -> {
-                        Snackbar.make(main_layout, "Player is stopped, retrying", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            main_layout,
+                            "Player is stopped, retrying",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                         prepare()
                         Log.d(TAG, "onPlayerStateChanged: STATE_ENDED")
                     }
@@ -171,9 +187,9 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun enableFullScreen() {
-        main_media_frame.removeView(exoPlayerView)
+        main_media_frame.removeView(exo_player_view)
         mFullScreenDialog.addContentView(
-            exoPlayerView,
+            exo_player_view,
             ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -190,8 +206,8 @@ class LoginFragment : BaseFragment() {
 
     private fun closeFullscreenDialog() {
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        (exoPlayerView.parent as ViewGroup).removeView(exoPlayerView)
-        main_media_frame.addView(exoPlayerView)
+        (exo_player_view.parent as ViewGroup).removeView(exo_player_view)
+        main_media_frame.addView(exo_player_view)
         mExoPlayerFullscreen = false
         mFullScreenDialog.dismiss()
         (exo_fullscreen_button.getChildAt(0) as ImageView).setImageDrawable(

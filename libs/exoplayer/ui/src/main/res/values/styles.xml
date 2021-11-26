@@ -36,6 +36,11 @@
     <item name="android:contentDescription">@string/exo_controls_fastforward_description</item>
   </style>
 
+  <style name="ExoMediaButton.Zoom">
+    <item name="android:src">@android:drawable/ic_menu_zoom</item>
+    <item name="android:contentDescription">Zoom</item>
+  </style>
+
   <style name="ExoMediaButton.Rewind">
     <item name="android:src">@drawable/exo_controls_rewind</item>
     <item name="android:contentDescription">@string/exo_controls_rewind_description</item>

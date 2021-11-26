@@ -18,9 +18,11 @@ package com.fernandocejas.sample.features.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import com.fernandocejas.sample.R
 import com.fernandocejas.sample.core.extension.inTransaction
 import com.fernandocejas.sample.core.platform.BaseActivity
+import com.fernandocejas.sample.core.platform.BaseFragment
 
 class LoginActivity : BaseActivity() {
     companion object {
@@ -28,4 +30,10 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun fragment() = LoginFragment()
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        super.onTouchEvent(event)
+        (supportFragmentManager.findFragmentById(R.id.fragmentContainer) as BaseFragment).onTouchEvent(event);
+        return true
+    }
 }
