@@ -17,6 +17,9 @@ package com.fernandocejas.sample.features.login
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import com.fernandocejas.sample.R
+import com.fernandocejas.sample.core.extension.inTransaction
 import com.fernandocejas.sample.core.platform.BaseActivity
 
 class LoginActivity : BaseActivity() {

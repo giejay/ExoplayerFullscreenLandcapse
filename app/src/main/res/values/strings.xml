@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Movies Kotlin</string>
+    <string name="app_name">Baby Stijn</string>
 
     <string name="action_refresh">Refresh</string>
 
@@ -9,4 +9,6 @@
     <string name="failure_movie_non_existent">Movie Not Existent.</string>
 
     <string name="content_description_empty">No content description.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

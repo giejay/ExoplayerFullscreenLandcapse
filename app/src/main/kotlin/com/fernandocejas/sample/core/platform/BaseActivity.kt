@@ -16,7 +16,9 @@
 package com.fernandocejas.sample.core.platform
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import com.fernandocejas.sample.R
 import com.fernandocejas.sample.core.extension.inTransaction
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,12 +40,17 @@ abstract class BaseActivity : AppCompatActivity() {
         addFragment(savedInstanceState)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true
+    }
+
     override fun onBackPressed() {
         (supportFragmentManager.findFragmentById(R.id.fragmentContainer) as BaseFragment).onBackPressed()
         super.onBackPressed()
     }
 
-    private fun addFragment(savedInstanceState: Bundle?) =
+    protected open fun addFragment(savedInstanceState: Bundle?) =
         savedInstanceState ?: supportFragmentManager.inTransaction {
             add(
                 R.id.fragmentContainer,

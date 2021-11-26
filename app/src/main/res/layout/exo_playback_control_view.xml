@@ -91,7 +91,7 @@
             android:layout_gravity="right">
 
             <ImageView
-                android:id="@+id/exo_fullscreen_icon"
+                android:id="@+id/exoFullScreenImage"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_gravity="center"

@@ -30,7 +30,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 
     <activity
         android:name=".features.login.LoginActivity"
-        android:label="@string/login_screen_title">
+        android:configChanges="orientation|screenSize|keyboardHidden">
     </activity>
 
     <activity

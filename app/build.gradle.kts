@@ -1,9 +1,11 @@
 plugins {
   // Application Specific Plugins
   id(BuildPlugins.androidApplication)
+
   id(BuildPlugins.kotlinAndroid)
   id(BuildPlugins.kotlinKapt)
   id(BuildPlugins.kotlinAndroidExtensions)
+
   id(BuildPlugins.androidHilt)
 
   // Internal Script plugins
@@ -34,7 +36,7 @@ android {
 }
 
 dependencies {
-  //Compile time dependencies
+    //Compile time dependencies
   kapt(Libraries.lifecycleCompiler)
   kapt(Libraries.hiltCompiler)
 
